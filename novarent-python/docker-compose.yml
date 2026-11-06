@@ -1,0 +1,51 @@
+# Ejecutar: docker compose up --build -d
+# Pruebas SQL en base separada: docker compose --profile tests run --rm tests
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-novarent}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-cambiar-esta-clave-local}
+      POSTGRES_DB: ${POSTGRES_DB:-novarent}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/init-test-db.sh:/docker-entrypoint-initdb.d/01-init-test-db.sh:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  app:
+    build: .
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-novarent}:${POSTGRES_PASSWORD:-cambiar-esta-clave-local}@db:5432/${POSTGRES_DB:-novarent}
+      NOVARENT_SEED_DEMO: ${NOVARENT_SEED_DEMO:-true}
+      API_KEY: ${API_KEY:-}
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=3)"]
+      interval: 10s
+      timeout: 4s
+      retries: 10
+
+  tests:
+    profiles: ["tests"]
+    build: .
+    environment:
+      NOVARENT_TEST_DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-novarent}:${POSTGRES_PASSWORD:-cambiar-esta-clave-local}@db:5432/novarent_test
+    command: ["pytest", "-q", "--cov=novarent", "--cov-report=term-missing", "--cov-fail-under=80"]
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:

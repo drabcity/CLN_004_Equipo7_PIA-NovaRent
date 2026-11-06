@@ -1,0 +1,1003 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "NovaRent - PIA Componentes de Logica de Negocio",
+    "description": "API REST de entrega, devolucion y liberacion de vehiculos. Los pagos bancarios son simulados, NO procesan dinero real. Los instantes se representan en minutos Unix (UTC).",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": [
+          "Operacion"
+        ],
+        "summary": "Health",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/categorias": {
+      "get": {
+        "tags": [
+          "Consultas"
+        ],
+        "summary": "Categorias",
+        "operationId": "categorias_api_categorias_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/api/vehiculos": {
+      "get": {
+        "tags": [
+          "Consultas"
+        ],
+        "summary": "Panel",
+        "operationId": "panel_api_vehiculos_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/api/reservaciones": {
+      "post": {
+        "tags": [
+          "Reservaciones"
+        ],
+        "summary": "Crear Reservacion",
+        "description": "Alta de demostracion para poder ejecutar CU-01; requiere categoria de CSV.",
+        "operationId": "crear_reservacion_api_reservaciones_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CrearReservacionEntrada"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/api/reservaciones/{reservacion_id}": {
+      "get": {
+        "tags": [
+          "Reservaciones"
+        ],
+        "summary": "Consultar Reservacion",
+        "operationId": "consultar_reservacion_api_reservaciones__reservacion_id__get",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "reservacion_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Reservacion Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reservaciones/{reservacion_id}/documentacion": {
+      "post": {
+        "tags": [
+          "CU-02"
+        ],
+        "summary": "Validar Documentacion",
+        "operationId": "validar_documentacion_api_reservaciones__reservacion_id__documentacion_post",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "reservacion_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Reservacion Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DocumentacionEntrada"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reservaciones/{reservacion_id}/oferta": {
+      "get": {
+        "tags": [
+          "CU-03"
+        ],
+        "summary": "Consultar Oferta",
+        "operationId": "consultar_oferta_api_reservaciones__reservacion_id__oferta_get",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "reservacion_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Reservacion Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reservaciones/{reservacion_id}/compensacion": {
+      "post": {
+        "tags": [
+          "CU-03"
+        ],
+        "summary": "Aplicar Compensacion",
+        "operationId": "aplicar_compensacion_api_reservaciones__reservacion_id__compensacion_post",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "reservacion_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Reservacion Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompensacionEntrada"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reservaciones/{reservacion_id}/entrega": {
+      "post": {
+        "tags": [
+          "CU-01"
+        ],
+        "summary": "Entregar",
+        "operationId": "entregar_api_reservaciones__reservacion_id__entrega_post",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "reservacion_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Reservacion Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntregaEntrada"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/contratos/{contrato_id}/devolucion": {
+      "post": {
+        "tags": [
+          "CU-04"
+        ],
+        "summary": "Devolver",
+        "operationId": "devolver_api_contratos__contrato_id__devolucion_post",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "contrato_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Contrato Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DevolucionEntrada"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/contratos/{contrato_id}/cargos": {
+      "get": {
+        "tags": [
+          "CU-04"
+        ],
+        "summary": "Resumen Cargos",
+        "operationId": "resumen_cargos_api_contratos__contrato_id__cargos_get",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "contrato_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Contrato Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/vehiculos/{vehiculo_id}/iniciar-limpieza": {
+      "post": {
+        "tags": [
+          "CU-05"
+        ],
+        "summary": "Iniciar Limpieza",
+        "operationId": "iniciar_limpieza_api_vehiculos__vehiculo_id__iniciar_limpieza_post",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "vehiculo_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Vehiculo Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/vehiculos/{vehiculo_id}/terminar": {
+      "post": {
+        "tags": [
+          "CU-05"
+        ],
+        "summary": "Marcar Terminado",
+        "operationId": "marcar_terminado_api_vehiculos__vehiculo_id__terminar_post",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "vehiculo_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Vehiculo Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/vehiculos/{vehiculo_id}/mantenimiento-mayor": {
+      "post": {
+        "tags": [
+          "CU-05"
+        ],
+        "summary": "Mantenimiento Mayor",
+        "operationId": "mantenimiento_mayor_api_vehiculos__vehiculo_id__mantenimiento_mayor_post",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "vehiculo_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Vehiculo Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MantenimientoEntrada"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reportes/utilizacion": {
+      "get": {
+        "tags": [
+          "Reportes US14"
+        ],
+        "summary": "Utilizacion",
+        "operationId": "utilizacion_api_reportes_utilizacion_get",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "inicio_minuto",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "title": "Inicio Minuto"
+            }
+          },
+          {
+            "name": "fin_minuto",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "title": "Fin Minuto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reportes/cargos-adicionales": {
+      "get": {
+        "tags": [
+          "Reportes US15"
+        ],
+        "summary": "Ingresos Por Cargos",
+        "operationId": "ingresos_por_cargos_api_reportes_cargos_adicionales_get",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "inicio_minuto",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "title": "Inicio Minuto"
+            }
+          },
+          {
+            "name": "fin_minuto",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "title": "Fin Minuto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CompensacionEntrada": {
+        "properties": {
+          "acepta_upgrade": {
+            "type": "boolean",
+            "title": "Acepta Upgrade",
+            "default": false
+          },
+          "acepta_downgrade": {
+            "type": "boolean",
+            "title": "Acepta Downgrade",
+            "default": false
+          }
+        },
+        "type": "object",
+        "title": "CompensacionEntrada"
+      },
+      "CrearReservacionEntrada": {
+        "properties": {
+          "categoria": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Categoria",
+            "examples": [
+              "Compacta"
+            ]
+          },
+          "pago_inicial_centavos": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Pago Inicial Centavos",
+            "examples": [
+              100000
+            ]
+          },
+          "duracion_dias": {
+            "type": "integer",
+            "maximum": 365.0,
+            "minimum": 1.0,
+            "title": "Duracion Dias",
+            "default": 2
+          }
+        },
+        "type": "object",
+        "required": [
+          "categoria",
+          "pago_inicial_centavos"
+        ],
+        "title": "CrearReservacionEntrada"
+      },
+      "DevolucionEntrada": {
+        "properties": {
+          "hora_devolucion_minuto": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Hora Devolucion Minuto"
+          },
+          "inspeccion_devolucion": {
+            "$ref": "#/components/schemas/InspeccionEntrada"
+          }
+        },
+        "type": "object",
+        "required": [
+          "hora_devolucion_minuto",
+          "inspeccion_devolucion"
+        ],
+        "title": "DevolucionEntrada"
+      },
+      "DocumentacionEntrada": {
+        "properties": {
+          "titular_licencia": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Titular Licencia",
+            "examples": [
+              "Ana Perez"
+            ]
+          },
+          "edad": {
+            "type": "integer",
+            "maximum": 120.0,
+            "minimum": 0.0,
+            "title": "Edad",
+            "examples": [
+              30
+            ]
+          },
+          "vigencia_licencia_minuto": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Vigencia Licencia Minuto"
+          },
+          "vigencia_identificacion_minuto": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Vigencia Identificacion Minuto"
+          },
+          "identidad_verificada": {
+            "type": "boolean",
+            "title": "Identidad Verificada"
+          }
+        },
+        "type": "object",
+        "required": [
+          "titular_licencia",
+          "edad",
+          "vigencia_licencia_minuto",
+          "vigencia_identificacion_minuto",
+          "identidad_verificada"
+        ],
+        "title": "DocumentacionEntrada"
+      },
+      "EntregaEntrada": {
+        "properties": {
+          "ultimos_4_tarjeta": {
+            "type": "string",
+            "pattern": "^[0-9]{4}$",
+            "title": "Ultimos 4 Tarjeta",
+            "examples": [
+              "4242"
+            ]
+          },
+          "titular_tarjeta": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Titular Tarjeta",
+            "examples": [
+              "Ana Perez"
+            ]
+          },
+          "inspeccion_salida": {
+            "$ref": "#/components/schemas/InspeccionEntrada"
+          }
+        },
+        "type": "object",
+        "required": [
+          "ultimos_4_tarjeta",
+          "titular_tarjeta",
+          "inspeccion_salida"
+        ],
+        "title": "EntregaEntrada"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "InspeccionEntrada": {
+        "properties": {
+          "kilometraje": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Kilometraje",
+            "examples": [
+              12000
+            ]
+          },
+          "combustible_octavos": {
+            "type": "integer",
+            "maximum": 8.0,
+            "minimum": 0.0,
+            "title": "Combustible Octavos",
+            "examples": [
+              8
+            ]
+          },
+          "marcas_de_dano": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Marcas De Dano",
+            "default": 0
+          },
+          "fotografias": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Fotografias",
+            "default": 1
+          },
+          "esquema_completado": {
+            "type": "boolean",
+            "title": "Esquema Completado",
+            "default": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "kilometraje",
+          "combustible_octavos"
+        ],
+        "title": "InspeccionEntrada"
+      },
+      "MantenimientoEntrada": {
+        "properties": {
+          "motivo": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Motivo"
+          },
+          "monto_centavos": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Monto Centavos"
+          }
+        },
+        "type": "object",
+        "required": [
+          "motivo",
+          "monto_centavos"
+        ],
+        "title": "MantenimientoEntrada"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    },
+    "securitySchemes": {
+      "APIKeyHeader": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-API-Key"
+      }
+    }
+  }
+}

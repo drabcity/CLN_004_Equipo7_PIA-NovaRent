@@ -1,0 +1,167 @@
+@startuml mapa_dominio
+title NovaRent — Mapa de dominio
+skinparam shadowing false
+skinparam defaultFontName Helvetica
+skinparam classAttributeIconSize 0
+skinparam roundCorner 8
+skinparam ArrowColor #444444
+skinparam packageStyle rectangle
+skinparam class {
+  BackgroundColor<<Aggregate Root>> #E0E7FF
+  BorderColor<<Aggregate Root>> #4338CA
+  BackgroundColor<<Entity>> #CCFBF1
+  BorderColor<<Entity>> #0F766E
+  BackgroundColor<<Value Object>> #E0F2FE
+  BorderColor<<Value Object>> #0369A1
+  BackgroundColor<<Domain Service>> #FEF3C7
+  BorderColor<<Domain Service>> #B45309
+}
+skinparam package {
+  BackgroundColor #FAFAFA
+  BorderColor #374151
+}
+hide circle
+hide empty methods
+skinparam note {
+  BackgroundColor #FFFFFF
+  BorderColor #9CA3AF
+}
+
+package "Aggregate: ContratoDeRenta" #F5F3FF {
+  class ContratoDeRenta <<Aggregate Root>> {
+    id
+    reservacion_id
+    vehiculo_id
+    tarifa_diaria : Dinero
+    capacidad_tanque : litros
+    hora_devolucion
+    devuelto : bool
+  }
+  class CargoExtra <<Entity>> {
+    tipo : Retraso | Combustible | Kilometraje | Daños | Mant. Mayor
+    monto : Dinero
+    descripcion
+    cancelado : bool
+  }
+  class InspeccionDeSalida <<Value Object>> {
+    kilometraje · combustible
+    marcas_de_daño · fotografias
+    esquema_completado
+  }
+  class InspeccionDeDevolucion <<Value Object>> {
+    kilometraje · combustible
+    marcas_de_daño · fotografias
+  }
+  class VoucherAbierto <<Value Object>> {
+    ultimos_4 · titular_tarjeta
+    codigo_de_autorizacion
+  }
+  class PeriodoDeRenta <<Value Object>> {
+    inicio · fin_pactado
+  }
+}
+
+package "Aggregate: Reservacion" #F0FDFA {
+  class Reservacion <<Aggregate Root>> {
+    id
+    categoria : Categoria
+    tarifa_diaria : Dinero
+    pago_inicial : Dinero
+    retencion : Dinero
+    estatus : Confirmada | Entregada | Cancelada…
+  }
+  class DocumentacionConductor <<Value Object>> {
+    titular_licencia · edad
+    vigencia_licencia
+    vigencia_identificacion
+    identidad_verificada
+  }
+  class PeriodoDeRenta_R as "PeriodoDeRenta" <<Value Object>> {
+    inicio · fin_pactado
+  }
+  class OfertaDeCompensacion <<Value Object>> {
+    tipo : Upgrade | Downgrade | Ninguna
+    categoria_destino
+    descuento_porcentaje
+    tarifa_resultante
+  }
+}
+
+package "Aggregate: Vehiculo" #F8FAFC {
+  class Vehiculo <<Aggregate Root>> {
+    id
+    placa
+    categoria : Categoria
+    capacidad_tanque : litros
+    estatus : Disponible | Rentado | En revisión |
+    Limpieza | Mantenimiento Mayor
+  }
+}
+
+package "Servicios del dominio" #FFFBEB {
+  class CompensacionDeCategoria <<Domain Service>> {
+    propone upgrade o downgrade
+    (20% de descuento)
+  }
+  class CalculadoraDeCargosExtra <<Domain Service>> {
+    aplica las PoliticaDeCargo:
+    retraso · combustible · km excedente
+  }
+}
+
+' ---- composicion dentro del Aggregate
+ContratoDeRenta "1" *-- "0..*" CargoExtra
+ContratoDeRenta "1" *-- "1" InspeccionDeSalida
+ContratoDeRenta "1" *-- "0..1" InspeccionDeDevolucion
+ContratoDeRenta "1" *-- "1" VoucherAbierto
+ContratoDeRenta "1" *-- "1" PeriodoDeRenta
+Reservacion "1" *-- "0..1" DocumentacionConductor
+Reservacion "1" *-- "1" PeriodoDeRenta_R
+Reservacion "1" *-- "0..1" OfertaDeCompensacion
+
+' ---- entre Aggregates: solo por id
+ContratoDeRenta ..> Reservacion : reservacion_id
+ContratoDeRenta ..> Vehiculo : vehiculo_id
+
+' ---- servicios
+ContratoDeRenta ..> CalculadoraDeCargosExtra : usa
+CalculadoraDeCargosExtra ..> CargoExtra : produce
+CompensacionDeCategoria ..> OfertaDeCompensacion : produce
+CompensacionDeCategoria ..> Reservacion : propone a
+
+note as REGLAS
+<b>Reglas que protege cada Aggregate</b>
+<b>Reservacion</b>
+1. Solo se entrega si la documentación es válida (CU-02).
+2. Documentación inválida cancela la reservación y retiene el 10% del pago inicial.
+3. Sin vehículo de la categoría: upgrade sin costo o downgrade con 20% de descuento;
+    si el cliente rechaza, se cancela (CU-03).
+4. Una reservación entregada o cancelada ya no cambia.
+<b>ContratoDeRenta</b>
+5. Se crea solo con voucher válido (tarjeta a nombre del titular de la licencia), esquema de daños completo y al menos una foto.
+6. Una devolución se registra una sola vez (ContratoYaDevuelto).
+7. Retraso: 120 min de gracia; desde el minuto 121, 20% de la tarifa diaria por hora
+    (más de 4 h = día completo).
+8. Combustible faltante = litros × precio + $100 MXN. Kilometraje: 250 km/día incluidos, $5/km extra.
+9. Solo Administración cancela cargos (US08).
+<b>Vehiculo</b>
+10. Ciclo: Disponible → Rentado → En revisión → Limpieza → Disponible | Mantenimiento Mayor.
+11. Solo un vehículo Disponible se puede entregar.
+end note
+
+note as EVENTOS
+<b>Domain Events</b>
+Reservacion: DocumentacionInvalidaRegistrada · CategoriaCompensada
+ContratoDeRenta: VehiculoEntregado · VehiculoDevuelto · CargosExtraCalculados
+Vehiculo: VehiculoLiberado · MantenimientoMayorRegistrado
+end note
+
+note as LEGEND
+<b>Cómo leer</b>
+Cada recuadro es un <b>Aggregate</b>: su objeto índigo es la raíz (única puerta de entrada).
+Teal = Entity (identidad dentro del Aggregate) · Azul cielo = Value Object (sin identidad).
+Línea con rombo = pertenece al Aggregate. Línea punteada = referencia a otro Aggregate
+<b>solo por id</b>, nunca por objeto. Ámbar = Domain Service (lógica que no vive en un solo Aggregate).
+Cada operación de servicio abre una sola transacción y modifica un Aggregate a la vez.
+end note
+@enduml

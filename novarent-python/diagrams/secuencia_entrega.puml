@@ -1,0 +1,87 @@
+@startuml secuencia_entrega
+title Secuencia 1 — CU-01 Entregar vehículo y CU-02 Documentación inválida (flujo principal)
+autonumber
+skinparam shadowing false
+skinparam defaultFontName Helvetica
+skinparam maxMessageSize 260
+skinparam BoxPadding 10
+skinparam sequence {
+  ArrowColor #333333
+  LifeLineBorderColor #8A8A8A
+  LifeLineBackgroundColor #FFFFFF
+  ParticipantBackgroundColor #E6E6FA
+  ParticipantBorderColor #5B5B9A
+  ActorBackgroundColor #F3F4F6
+  ActorBorderColor #6B7280
+  GroupBackgroundColor #FFFFFF
+  GroupBorderColor #6B7280
+  GroupHeaderBackgroundColor #E5E7EB
+  BoxBorderColor #9CA3AF
+}
+skinparam note {
+  BackgroundColor #FFFBD6
+  BorderColor #B8A93A
+}
+
+actor "Agente de Renta" as Agente
+box "Aplicación" #E8F0FB
+  participant "ServicioDeValidacionDeDocumentacion" as SVD
+  participant "ServicioDeEntrega" as SE
+  participant "UnidadDeTrabajo" as UoW
+end box
+box "Dominio" #FCEEDD
+  participant "ReservacionRepository" as RR
+  participant "Reservacion" as R
+  participant "DisponibilidadDeVehiculos" as DV
+  participant "Vehiculo" as V
+  participant "ContratoDeRenta" as C
+  participant "ContratoDeRentaRepository" as CR
+  participant "VehiculoRepository" as VR
+end box
+box "Infraestructura" #E8F5E9
+  participant "PasarelaDeAutorizacionBancaria" as PB
+  participant "PublicadorDeEventos" as PE
+end box
+note over Agente, PE #FFFBD6 : CU-02 y paso 1 de CU-01: validar documentacion
+Agente -> SVD : validar_documentacion_del_conductor(reservacion_id, documentacion)
+activate SVD
+SVD -> UoW : abrir transaccion
+SVD -> RR : obtener(reservacion_id)
+RR --> SVD : Reservacion
+SVD -> R : validar_documentacion(documentacion)
+alt documentacion invalida (CU-02)
+R --> SVD : DocumentacionInvalida
+SVD -> R : cancelar_por_documentacion_invalida() (retiene 10% del pago inicial)
+SVD -> RR : guardar(reservacion)
+SVD -> UoW : commit
+UoW -> PE : publicar DocumentacionInvalidaRegistrada
+SVD --> Agente : reservacion cancelada, no se entrega
+deactivate SVD
+else documentacion valida
+R --> SVD : ok
+SVD -> RR : guardar(reservacion) (documentacion registrada)
+SVD -> UoW : commit
+SVD --> Agente : puede continuar
+deactivate SVD
+end
+note over Agente, PE #FFFBD6 : CU-01: entregar vehiculo (flujo normal)
+Agente -> SE : entregar_vehiculo(reservacion_id, voucher, inspeccion_salida, firma)
+activate SE
+SE -> PB : autorizar_deposito(tarjeta)
+PB --> SE : codigo de autorizacion
+SE -> UoW : abrir transaccion
+SE -> RR : obtener(reservacion_id)
+RR --> SE : Reservacion
+SE -> DV : buscar_disponible_de_categoria(categoria)
+DV --> SE : Vehiculo disponible
+SE -> V : entregar() (solo si esta Disponible)
+SE -> C : crear(reservacion, vehiculo, voucher, inspeccion_salida) (esquema y minimo una foto)
+SE -> R : marcar_entregada()
+SE -> CR : agregar(contrato)
+SE -> VR : guardar(vehiculo)
+SE -> RR : guardar(reservacion)
+SE -> UoW : commit
+UoW -> PE : publicar VehiculoEntregado
+SE --> Agente : contrato_id
+deactivate SE
+@enduml

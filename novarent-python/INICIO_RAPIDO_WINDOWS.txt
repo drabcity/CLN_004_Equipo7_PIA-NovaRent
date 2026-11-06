@@ -1,0 +1,32 @@
+NOVARENT - GUIA RAPIDA PARA INTEGRANTE 3 (WINDOWS)
+
+1. Extraer este ZIP.
+2. Abrir la carpeta novarent-python en Visual Studio Code.
+3. Abrir Terminal -> Nuevo Terminal.
+4. Ejecutar, uno por uno:
+
+   py -m venv .venv
+   .venv\Scripts\Activate.ps1
+   python -m pip install -e ".[dev]"
+   python -m novarent.infraestructura.cargar_csv --directorio data/ejemplo
+   uvicorn novarent.api.main:app --reload
+
+5. Ir a http://localhost:8000/docs y probar la API.
+6. En otra terminal, con el entorno activado:
+
+   pytest -q --cov=novarent --cov-report=term-missing --cov-fail-under=80
+
+7. Si tienes Docker Desktop, en vez de pasos 4-5:
+
+   Copy-Item .env.example .env
+   docker compose up --build -d
+   docker compose --profile tests run --rm tests
+
+*** NOTA ***
+- Los CSV incluidos son de ejemplo; faltan los CSV oficiales de NovaRent.
+- El banco es simulado; no hay pagos reales.
+- GitHub Actions funcionara cuando suban los archivos al repositorio del equipo.
+- Render requiere conectar la cuenta y definir DATABASE_URL y API_KEY.
+- Las formulas US14/US15 se deben confirmar con el Integrante 1.
+
+LEE README.md PARA INSTRUCCIONES DETALLADAS.

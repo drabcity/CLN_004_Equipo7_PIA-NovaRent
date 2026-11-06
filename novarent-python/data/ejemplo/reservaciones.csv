@@ -1,0 +1,3 @@
+id,categoria,pago_inicial_centavos,duracion_dias,inicio_minuto,fin_pactado_minuto
+res-demo-1,Compacta,100000,2,,
+res-demo-2,SUV,150000,3,,

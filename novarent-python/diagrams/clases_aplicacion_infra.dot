@@ -1,0 +1,67 @@
+digraph aplicacion {
+  graph [rankdir=LR, fontname="Helvetica", nodesep=0.22, ranksep=1.3, splines=true, pad=0.2];
+  node [shape=plain, fontname="Helvetica", fontsize=11];
+  edge [fontname="Helvetica", fontsize=9, color="#444444", arrowsize=0.8];
+  subgraph cluster_app { label="APLICACIÓN"; labeljust="l"; style="rounded,filled"; fillcolor="#ffffff"; color="#1d4ed8"; penwidth=2; fontsize=14; fontcolor="#1d4ed8";
+  ServicioDeValidacionDeDocumentacion [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#dbeafe" COLOR="#1d4ed8"><TR><TD ALIGN="CENTER"><B>ServicioDeValidacionDeDocumentacion</B></TD></TR><HR/><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9">+validar_documentacion_del_conductor()</FONT></TD></TR></TABLE>>];
+  ServicioDeEntrega [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#dbeafe" COLOR="#1d4ed8"><TR><TD ALIGN="CENTER"><B>ServicioDeEntrega</B></TD></TR><HR/><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9">+entregar_vehiculo()</FONT></TD></TR></TABLE>>];
+  ServicioDeCompensacionDeCategoria [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#dbeafe" COLOR="#1d4ed8"><TR><TD ALIGN="CENTER"><B>ServicioDeCompensacionDeCategoria</B></TD></TR><HR/><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9">+resolver_categoria_no_disponible()</FONT></TD></TR></TABLE>>];
+  ServicioDeDevolucion [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#dbeafe" COLOR="#1d4ed8"><TR><TD ALIGN="CENTER"><B>ServicioDeDevolucion</B></TD></TR><HR/><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9">+registrar_devolucion()</FONT></TD></TR></TABLE>>];
+  ServicioDeLimpieza [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#dbeafe" COLOR="#1d4ed8"><TR><TD ALIGN="CENTER"><B>ServicioDeLimpieza</B></TD></TR><HR/><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9">+iniciar_limpieza()</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9">+marcar_terminado()</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9">+reportar_mantenimiento_mayor()</FONT></TD></TR></TABLE>>];
+  ConsultarOfertaDeCompensacionHandler [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#dbeafe" COLOR="#1d4ed8"><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="9"><I>«Query Handler»</I></FONT></TD></TR><TR><TD ALIGN="CENTER"><B>ConsultarOfertaDeCompensacionHandler</B></TD></TR></TABLE>>];
+  ConsultarPanelDeVehiculosHandler [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#dbeafe" COLOR="#1d4ed8"><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="9"><I>«Query Handler»</I></FONT></TD></TR><TR><TD ALIGN="CENTER"><B>ConsultarPanelDeVehiculosHandler</B></TD></TR></TABLE>>];
+  ConsultarResumenDeCargosHandler [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#dbeafe" COLOR="#1d4ed8"><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="9"><I>«Query Handler»</I></FONT></TD></TR><TR><TD ALIGN="CENTER"><B>ConsultarResumenDeCargosHandler</B></TD></TR></TABLE>>];
+  UnidadDeTrabajo [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#dbeafe" COLOR="#1d4ed8"><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="9"><I>«interface»</I></FONT></TD></TR><TR><TD ALIGN="CENTER"><B>UnidadDeTrabajo</B></TD></TR></TABLE>>];
+  PasarelaDeAutorizacionBancaria [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#dbeafe" COLOR="#1d4ed8"><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="9"><I>«interface»</I></FONT></TD></TR><TR><TD ALIGN="CENTER"><B>PasarelaDeAutorizacionBancaria</B></TD></TR></TABLE>>];
+  ProveedorDePrecioDeCombustible [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#dbeafe" COLOR="#1d4ed8"><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="9"><I>«interface»</I></FONT></TD></TR><TR><TD ALIGN="CENTER"><B>ProveedorDePrecioDeCombustible</B></TD></TR></TABLE>>];
+  PublicadorDeEventos [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#dbeafe" COLOR="#1d4ed8"><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="9"><I>«interface»</I></FONT></TD></TR><TR><TD ALIGN="CENTER"><B>PublicadorDeEventos</B></TD></TR></TABLE>>];
+  LectorDePanelDeVehiculos [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#dbeafe" COLOR="#1d4ed8"><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="9"><I>«interface»</I></FONT></TD></TR><TR><TD ALIGN="CENTER"><B>LectorDePanelDeVehiculos</B></TD></TR></TABLE>>];
+  LectorDeResumenDeCargos [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#dbeafe" COLOR="#1d4ed8"><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="9"><I>«interface»</I></FONT></TD></TR><TR><TD ALIGN="CENTER"><B>LectorDeResumenDeCargos</B></TD></TR></TABLE>>];
+  }
+  subgraph cluster_dom { label="DOMINIO (lo que usa la aplicación)"; labeljust="l"; style="rounded,filled"; fillcolor="#ffffff"; color="#2e7d32"; penwidth=2; fontsize=14; fontcolor="#2e7d32";
+  ReservacionRepository [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#dff3e4" COLOR="#2e7d32"><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="9"><I>«interface»</I></FONT></TD></TR><TR><TD ALIGN="CENTER"><B>ReservacionRepository</B></TD></TR></TABLE>>];
+  ContratoDeRentaRepository [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#dff3e4" COLOR="#2e7d32"><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="9"><I>«interface»</I></FONT></TD></TR><TR><TD ALIGN="CENTER"><B>ContratoDeRentaRepository</B></TD></TR></TABLE>>];
+  VehiculoRepository [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#dff3e4" COLOR="#2e7d32"><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="9"><I>«interface»</I></FONT></TD></TR><TR><TD ALIGN="CENTER"><B>VehiculoRepository</B></TD></TR></TABLE>>];
+  DisponibilidadDeVehiculos [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#dff3e4" COLOR="#2e7d32"><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="9"><I>«interface»</I></FONT></TD></TR><TR><TD ALIGN="CENTER"><B>DisponibilidadDeVehiculos</B></TD></TR></TABLE>>];
+  CatalogoDeCategorias [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#dff3e4" COLOR="#2e7d32"><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="9"><I>«interface»</I></FONT></TD></TR><TR><TD ALIGN="CENTER"><B>CatalogoDeCategorias</B></TD></TR></TABLE>>];
+  CompensacionDeCategoria [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#dff3e4" COLOR="#2e7d32"><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="9"><I>«Domain Service»</I></FONT></TD></TR><TR><TD ALIGN="CENTER"><B>CompensacionDeCategoria</B></TD></TR></TABLE>>];
+  CalculadoraDeCargosExtra [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#dff3e4" COLOR="#2e7d32"><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="9"><I>«Domain Service»</I></FONT></TD></TR><TR><TD ALIGN="CENTER"><B>CalculadoraDeCargosExtra</B></TD></TR></TABLE>>];
+  }
+  subgraph cluster_inf { label="INFRAESTRUCTURA"; labeljust="l"; style="rounded,filled"; fillcolor="#ffffff"; color="#b45309"; penwidth=2; fontsize=14; fontcolor="#b45309";
+  UnidadDeTrabajoSql [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#fde7c8" COLOR="#b45309"><TR><TD ALIGN="CENTER"><B>UnidadDeTrabajoSql</B></TD></TR></TABLE>>];
+  ReservacionRepositorioSql [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#fde7c8" COLOR="#b45309"><TR><TD ALIGN="CENTER"><B>ReservacionRepositorioSql</B></TD></TR></TABLE>>];
+  ContratoRepositorioSql [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#fde7c8" COLOR="#b45309"><TR><TD ALIGN="CENTER"><B>ContratoRepositorioSql</B></TD></TR></TABLE>>];
+  VehiculoRepositorioSql [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#fde7c8" COLOR="#b45309"><TR><TD ALIGN="CENTER"><B>VehiculoRepositorioSql</B></TD></TR></TABLE>>];
+  PasarelaBancariaHttp [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#fde7c8" COLOR="#b45309"><TR><TD ALIGN="CENTER"><B>PasarelaBancariaHttp</B></TD></TR></TABLE>>];
+  ProveedorPrecioCombustibleHttp [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#fde7c8" COLOR="#b45309"><TR><TD ALIGN="CENTER"><B>ProveedorPrecioCombustibleHttp</B></TD></TR></TABLE>>];
+  LectorPanelSql [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#fde7c8" COLOR="#b45309"><TR><TD ALIGN="CENTER"><B>LectorPanelSql</B></TD></TR></TABLE>>];
+  LectorResumenCargosSql [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#fde7c8" COLOR="#b45309"><TR><TD ALIGN="CENTER"><B>LectorResumenCargosSql</B></TD></TR></TABLE>>];
+  }
+  ServicioDeValidacionDeDocumentacion -> UnidadDeTrabajo [style=dashed, arrowhead=vee];
+  ServicioDeEntrega -> UnidadDeTrabajo [style=dashed, arrowhead=vee];
+  ServicioDeCompensacionDeCategoria -> UnidadDeTrabajo [style=dashed, arrowhead=vee];
+  ServicioDeDevolucion -> UnidadDeTrabajo [style=dashed, arrowhead=vee];
+  ServicioDeLimpieza -> UnidadDeTrabajo [style=dashed, arrowhead=vee];
+  ServicioDeEntrega -> PasarelaDeAutorizacionBancaria [style=dashed, arrowhead=vee];
+  ServicioDeDevolucion -> ProveedorDePrecioDeCombustible [style=dashed, arrowhead=vee];
+  ServicioDeEntrega -> DisponibilidadDeVehiculos [style=dashed, arrowhead=vee];
+  ServicioDeCompensacionDeCategoria -> CompensacionDeCategoria [style=dashed, arrowhead=vee];
+  ServicioDeDevolucion -> CalculadoraDeCargosExtra [style=dashed, arrowhead=vee];
+  ConsultarOfertaDeCompensacionHandler -> CompensacionDeCategoria [style=dashed, arrowhead=vee];
+  ConsultarOfertaDeCompensacionHandler -> ReservacionRepository [style=dashed, arrowhead=vee];
+  ConsultarPanelDeVehiculosHandler -> LectorDePanelDeVehiculos [style=dashed, arrowhead=vee];
+  ConsultarResumenDeCargosHandler -> LectorDeResumenDeCargos [style=dashed, arrowhead=vee];
+  UnidadDeTrabajo -> PublicadorDeEventos [style=dashed, arrowhead=vee];
+  UnidadDeTrabajo -> ReservacionRepository [arrowhead=vee];
+  UnidadDeTrabajo -> ContratoDeRentaRepository [arrowhead=vee];
+  UnidadDeTrabajo -> VehiculoRepository [arrowhead=vee];
+  UnidadDeTrabajo -> UnidadDeTrabajoSql [dir=back, arrowtail=onormal, arrowhead=none, style=dashed];
+  ReservacionRepository -> ReservacionRepositorioSql [dir=back, arrowtail=onormal, arrowhead=none, style=dashed];
+  ContratoDeRentaRepository -> ContratoRepositorioSql [dir=back, arrowtail=onormal, arrowhead=none, style=dashed];
+  VehiculoRepository -> VehiculoRepositorioSql [dir=back, arrowtail=onormal, arrowhead=none, style=dashed];
+  DisponibilidadDeVehiculos -> VehiculoRepositorioSql [dir=back, arrowtail=onormal, arrowhead=none, style=dashed];
+  PasarelaDeAutorizacionBancaria -> PasarelaBancariaHttp [dir=back, arrowtail=onormal, arrowhead=none, style=dashed];
+  ProveedorDePrecioDeCombustible -> ProveedorPrecioCombustibleHttp [dir=back, arrowtail=onormal, arrowhead=none, style=dashed];
+  LectorDePanelDeVehiculos -> LectorPanelSql [dir=back, arrowtail=onormal, arrowhead=none, style=dashed];
+  LectorDeResumenDeCargos -> LectorResumenCargosSql [dir=back, arrowtail=onormal, arrowhead=none, style=dashed];
+}

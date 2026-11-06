@@ -1,0 +1,82 @@
+@startuml secuencia_devolucion
+title Secuencia 2 — CU-04 Registrar devolución (reglas de cargo y excepción ContratoYaDevuelto)
+autonumber
+skinparam shadowing false
+skinparam defaultFontName Helvetica
+skinparam maxMessageSize 260
+skinparam BoxPadding 10
+skinparam sequence {
+  ArrowColor #333333
+  LifeLineBorderColor #8A8A8A
+  LifeLineBackgroundColor #FFFFFF
+  ParticipantBackgroundColor #E6E6FA
+  ParticipantBorderColor #5B5B9A
+  ActorBackgroundColor #F3F4F6
+  ActorBorderColor #6B7280
+  GroupBackgroundColor #FFFFFF
+  GroupBorderColor #6B7280
+  GroupHeaderBackgroundColor #E5E7EB
+  BoxBorderColor #9CA3AF
+}
+skinparam note {
+  BackgroundColor #FFFBD6
+  BorderColor #B8A93A
+}
+
+actor "Personal de Patio" as Patio
+box "Aplicación" #E8F0FB
+  participant "ServicioDeDevolucion" as SD
+  participant "UnidadDeTrabajo" as UoW
+end box
+box "Dominio" #FCEEDD
+  participant "ContratoDeRentaRepository" as CR
+  participant "VehiculoRepository" as VR
+  participant "ContratoDeRenta" as C
+  participant "CalculadoraDeCargosExtra" as CAL
+  participant "PoliticaDeCargo" as POL
+  participant "Vehiculo" as V
+end box
+box "Infraestructura" #E8F5E9
+  participant "ProveedorDePrecioDeCombustible" as PC
+  participant "PublicadorDeEventos" as PE
+end box
+Patio -> SD : registrar_devolucion(contrato_id, inspeccion_devolucion, hora_devolucion)
+activate SD
+SD -> UoW : abrir transaccion
+SD -> CR : obtener(contrato_id)
+CR --> SD : ContratoDeRenta
+SD -> VR : obtener(vehiculo_id)
+VR --> SD : Vehiculo
+SD -> PC : precio_por_litro_actual()
+PC --> SD : precio del litro
+SD -> C : registrar_devolucion(inspeccion, hora, precio, calculadora)
+alt contrato ya devuelto
+C --> SD : ContratoYaDevuelto
+SD -> UoW : rollback
+SD --> Patio : error, nada cambia
+deactivate SD
+else devolucion valida
+C -> CAL : calcular_cargos(contexto)
+loop por cada PoliticaDeCargo
+CAL -> POL : calcular(contexto)
+alt retraso desde el minuto 121
+POL --> CAL : 20% de la tarifa diaria por hora (mas de 4 h: dia completo)
+else combustible menor al entregado
+POL --> CAL : litros faltantes x precio + $100 MXN
+else km mayor a 250 por dia
+POL --> CAL : km excedente x $5 MXN
+else no aplica
+POL --> CAL : ningun cargo
+end
+end
+CAL --> C : cargos extra
+C --> SD : cargos registrados en el contrato
+SD -> V : recibir_en_revision()
+SD -> CR : guardar(contrato)
+SD -> VR : guardar(vehiculo)
+SD -> UoW : commit
+UoW -> PE : publicar VehiculoDevuelto y CargosExtraCalculados
+SD --> Patio : contrato_id
+deactivate SD
+end
+@enduml

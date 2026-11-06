@@ -1,0 +1,4 @@
+id,placa,categoria,capacidad_tanque_litros
+veh-eco-1,NR-ECO-01,Economica,40
+veh-com-1,NR-COM-01,Compacta,45
+veh-suv-1,NR-SUV-01,SUV,60

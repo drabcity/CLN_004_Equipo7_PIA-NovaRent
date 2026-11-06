@@ -1,0 +1,15 @@
+# Plantilla para Render. REQUIERE vincular repo, definir DATABASE_URL y API_KEY.
+# No implica que el despliegue ya exista.
+services:
+  - type: web
+    name: novarent-pia
+    runtime: docker
+    plan: starter
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: API_KEY
+        sync: false
+      - key: NOVARENT_SEED_DEMO
+        value: 'false'

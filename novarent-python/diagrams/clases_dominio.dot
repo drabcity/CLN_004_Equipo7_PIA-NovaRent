@@ -1,0 +1,37 @@
+digraph dominio {
+  graph [rankdir=TB, fontname="Helvetica", nodesep=0.3, ranksep=0.8, splines=true, pad=0.2];
+  node [shape=plain, fontname="Helvetica", fontsize=11];
+  edge [fontname="Helvetica", fontsize=9, color="#444444", arrowsize=0.8];
+  subgraph cluster_dom { label="DOMINIO"; labeljust="l"; style="rounded,filled"; fillcolor="#ffffff"; color="#2e7d32"; penwidth=2; fontsize=14; fontcolor="#2e7d32";
+  Reservacion [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#dff3e4" COLOR="#2e7d32"><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="9"><I>«Raíz de Aggregate»</I></FONT></TD></TR><TR><TD ALIGN="CENTER"><B>Reservacion</B></TD></TR><HR/><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9">+validar_documentacion()</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9">+cancelar_por_documentacion_invalida()</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9">+aplicar_compensacion()</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9">+marcar_entregada()</FONT></TD></TR></TABLE>>];
+  ContratoDeRenta [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#dff3e4" COLOR="#2e7d32"><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="9"><I>«Raíz de Aggregate»</I></FONT></TD></TR><TR><TD ALIGN="CENTER"><B>ContratoDeRenta</B></TD></TR><HR/><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9">+crear()</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9">+registrar_devolucion()</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9">+registrar_cargo_manual()</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9">+agregar_cargo_retroactivo()</FONT></TD></TR></TABLE>>];
+  Vehiculo [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#dff3e4" COLOR="#2e7d32"><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="9"><I>«Raíz de Aggregate»</I></FONT></TD></TR><TR><TD ALIGN="CENTER"><B>Vehiculo</B></TD></TR><HR/><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9">+entregar()</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9">+recibir_en_revision()</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9">+iniciar_limpieza()</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9">+marcar_terminado()</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9">+reportar_mantenimiento_mayor()</FONT></TD></TR></TABLE>>];
+  CargoExtra [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#dff3e4" COLOR="#2e7d32"><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="9"><I>«Entidad»</I></FONT></TD></TR><TR><TD ALIGN="CENTER"><B>CargoExtra</B></TD></TR></TABLE>>];
+  CompensacionDeCategoria [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#dff3e4" COLOR="#2e7d32"><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="9"><I>«Domain Service»</I></FONT></TD></TR><TR><TD ALIGN="CENTER"><B>CompensacionDeCategoria</B></TD></TR><HR/><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9">+proponer()</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9">+resolver()</FONT></TD></TR></TABLE>>];
+  CalculadoraDeCargosExtra [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#dff3e4" COLOR="#2e7d32"><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="9"><I>«Domain Service»</I></FONT></TD></TR><TR><TD ALIGN="CENTER"><B>CalculadoraDeCargosExtra</B></TD></TR><HR/><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9">+calcular()</FONT></TD></TR></TABLE>>];
+  PoliticaDeCargo [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#dff3e4" COLOR="#2e7d32"><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="9"><I>«interface»</I></FONT></TD></TR><TR><TD ALIGN="CENTER"><B>PoliticaDeCargo</B></TD></TR><HR/><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9">+calcular()</FONT></TD></TR></TABLE>>];
+  CargoPorRetraso [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#dff3e4" COLOR="#2e7d32"><TR><TD ALIGN="CENTER"><B>CargoPorRetraso</B></TD></TR></TABLE>>];
+  CargoPorCombustibleFaltante [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#dff3e4" COLOR="#2e7d32"><TR><TD ALIGN="CENTER"><B>CargoPorCombustibleFaltante</B></TD></TR></TABLE>>];
+  CargoPorKilometrajeExcedente [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#dff3e4" COLOR="#2e7d32"><TR><TD ALIGN="CENTER"><B>CargoPorKilometrajeExcedente</B></TD></TR></TABLE>>];
+  ReservacionRepository [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#dff3e4" COLOR="#2e7d32"><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="9"><I>«interface»</I></FONT></TD></TR><TR><TD ALIGN="CENTER"><B>ReservacionRepository</B></TD></TR></TABLE>>];
+  ContratoDeRentaRepository [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#dff3e4" COLOR="#2e7d32"><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="9"><I>«interface»</I></FONT></TD></TR><TR><TD ALIGN="CENTER"><B>ContratoDeRentaRepository</B></TD></TR></TABLE>>];
+  VehiculoRepository [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#dff3e4" COLOR="#2e7d32"><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="9"><I>«interface»</I></FONT></TD></TR><TR><TD ALIGN="CENTER"><B>VehiculoRepository</B></TD></TR></TABLE>>];
+  DisponibilidadDeVehiculos [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#dff3e4" COLOR="#2e7d32"><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="9"><I>«interface»</I></FONT></TD></TR><TR><TD ALIGN="CENTER"><B>DisponibilidadDeVehiculos</B></TD></TR></TABLE>>];
+  CatalogoDeCategorias [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="#dff3e4" COLOR="#2e7d32"><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="9"><I>«interface»</I></FONT></TD></TR><TR><TD ALIGN="CENTER"><B>CatalogoDeCategorias</B></TD></TR></TABLE>>];
+  }
+  ReservacionRepository -> Reservacion [arrowhead=vee, label="gestiona"];
+  ContratoDeRentaRepository -> ContratoDeRenta [arrowhead=vee, label="gestiona"];
+  VehiculoRepository -> Vehiculo [arrowhead=vee, label="gestiona"];
+  DisponibilidadDeVehiculos -> Vehiculo [arrowhead=vee, label="busca"];
+  ContratoDeRenta -> CargoExtra [arrowhead=none, arrowtail=diamond, dir=back];
+  ContratoDeRenta -> CalculadoraDeCargosExtra [style=dashed, arrowhead=vee, label="usa"];
+  CalculadoraDeCargosExtra -> PoliticaDeCargo [arrowhead=none, arrowtail=odiamond, dir=back];
+  PoliticaDeCargo -> CargoPorRetraso [dir=back, arrowtail=onormal, arrowhead=none, style=dashed];
+  PoliticaDeCargo -> CargoPorCombustibleFaltante [dir=back, arrowtail=onormal, arrowhead=none, style=dashed];
+  PoliticaDeCargo -> CargoPorKilometrajeExcedente [dir=back, arrowtail=onormal, arrowhead=none, style=dashed];
+  CompensacionDeCategoria -> DisponibilidadDeVehiculos [style=dashed, arrowhead=vee];
+  CompensacionDeCategoria -> CatalogoDeCategorias [style=dashed, arrowhead=vee];
+  CompensacionDeCategoria -> Reservacion [style=dashed, arrowhead=vee, label="propone a"];
+  ContratoDeRenta -> Reservacion [style=dashed, arrowhead=vee, label="por id"];
+  ContratoDeRenta -> Vehiculo [style=dashed, arrowhead=vee, label="por id"];
+}

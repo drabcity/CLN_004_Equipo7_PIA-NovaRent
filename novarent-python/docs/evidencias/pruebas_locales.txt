@@ -1,0 +1,38 @@
+.........................................................                [100%]
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.13.5-final-0 ________________
+
+Name                                                    Stmts   Miss  Cover   Missing
+-------------------------------------------------------------------------------------
+src/novarent/__init__.py                                    0      0   100%
+src/novarent/api/__init__.py                                0      0   100%
+src/novarent/api/esquemas.py                               33      0   100%
+src/novarent/api/main.py                                  137      5    96%   66, 74-75, 88-89
+src/novarent/aplicacion/__init__.py                         0      0   100%
+src/novarent/aplicacion/comandos.py                        17      0   100%
+src/novarent/aplicacion/consultas.py                       57      0   100%
+src/novarent/aplicacion/puertos.py                         18      0   100%
+src/novarent/aplicacion/servicios.py                      105      0   100%
+src/novarent/dominio/__init__.py                            9      0   100%
+src/novarent/dominio/cargo_extra.py                        16      0   100%
+src/novarent/dominio/compensacion_de_categoria.py          29      0   100%
+src/novarent/dominio/comun.py                              36      0   100%
+src/novarent/dominio/contrato_de_renta.py                  71      1    99%   58
+src/novarent/dominio/politicas_de_cargo.py                 59      0   100%
+src/novarent/dominio/repositorios.py                       14      0   100%
+src/novarent/dominio/reservacion.py                        77      2    97%   59, 71
+src/novarent/dominio/valores.py                            98      1    99%   94
+src/novarent/dominio/vehiculo.py                           57      0   100%
+src/novarent/infraestructura/__init__.py                    0      0   100%
+src/novarent/infraestructura/base_datos.py                 99      0   100%
+src/novarent/infraestructura/cargar_csv.py                 56     10    82%   20, 28, 64-70, 74
+src/novarent/infraestructura/contenedor.py                 28      0   100%
+src/novarent/infraestructura/contenedor_sql.py             49      0   100%
+src/novarent/infraestructura/memoria.py                   157      5    97%   49, 74, 186, 205, 234
+src/novarent/infraestructura/reportes_sql.py               33      4    88%   31-35
+src/novarent/infraestructura/repositorios_sql.py          136      6    96%   113, 132, 139, 201-204
+src/novarent/infraestructura/unidad_de_trabajo_sql.py      66     19    71%   45-47, 57-58, 68-83
+-------------------------------------------------------------------------------------
+TOTAL                                                    1457     53    96%
+Required test coverage of 80% reached. Total coverage: 96.36%
+57 passed in 2.06s
